@@ -10,7 +10,10 @@ export function test (opt) {
   }
 }
 
-export function lint () {
+export function lint (opt) {
+  if (opt === 'fix') {
+    run('eslint ./src --fix')
+  }
   run('eslint ./src')
 }
 
