@@ -1,13 +1,11 @@
 /* eslint-env jest */
 import log, { levels } from '../index'
-import { levelFilter } from '../middleware'
+import { levelFilter, consoleStream } from '../middleware'
 
 describe('middleware', () => {
-  let logger
+  let logger, calls
 
   describe('levelFilter', () => {
-    let calls = []
-
     beforeEach(() => {
       calls = []
       logger = log.use(levelFilter(levels.WARNING))
@@ -22,6 +20,24 @@ describe('middleware', () => {
       logger.warning('w')
       logger.error('e')
       expect(calls).toEqual([30, 40])
+    })
+  })
+
+  describe('consoleStream', () => {
+    beforeEach(() => {
+      calls = []
+      logger = log.use(consoleStream)
+        .use((next, level) => {
+          calls.push(level)
+        })
+    })
+
+    it('should should log to console', () => {
+      logger.debug('d', {})
+      logger.info('i', {})
+      logger.warning('w', {})
+      logger.error('e', {})
+      logger.critical('c', {})
     })
   })
 })
