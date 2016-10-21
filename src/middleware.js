@@ -26,4 +26,5 @@ export function consoleStream (next, level, message, extras) {
       console.error(message, extras)
       break
   }
+  next(level, message, extras)
 }
