@@ -42,6 +42,7 @@ describe('CoreLogger', () => {
           calls.push([level, message, extras])
         })
 
+      expect(logger.middlewares.length).toEqual(3)
       logger.log(10, 'test msg', 'extras')
       expect(calls).toEqual([
         [10, 'test msg', 'extras'],
@@ -63,6 +64,7 @@ describe('CoreLogger', () => {
           next(message, extras)
         })
 
+      expect(logger.middlewares.length).toEqual(2)
       logger.log(10, 'test msg', 'extras')
       expect(calls).toEqual([
         [10, '[note] test msg', 'extras'],

@@ -16,12 +16,19 @@ export class CoreLogger {
   }
 
   log (level, message, extras) {
-    const middlewares = this.middlewares.map((middleware, index, middlewares) => {
-      return middleware.bind(middlewares[index + 1] || doNothing, level)
+    let middlewares = this.middlewares.slice()
+    let nextMiddlewares = []
+    middlewares.reverse()
+    middlewares.forEach((middleware) => {
+      if (nextMiddlewares.length) {
+        nextMiddlewares.push(middleware.bind(undefined, nextMiddlewares[nextMiddlewares.length - 1], level))
+      } else {
+        nextMiddlewares.push(middleware.bind(undefined, doNothing, level))
+      }
     })
 
-    if (middlewares[1]) {
-      middlewares[1](message, extras)
+    if (nextMiddlewares[1]) {
+      nextMiddlewares[1](message, extras)
     }
   }
 
