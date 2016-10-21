@@ -2,7 +2,7 @@
   "name": "scribbly",
   "version": "1.0.0-beta.1",
   "description": "Minimalistic and flexible logging tool",
-  "main": "lib/index.js",
+  "main": "index.js",
   "scripts": {
     "test": "run test"
   },

@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import { CoreLogger } from '../lib/index'
+import { CoreLogger } from '../index'
 
 describe('CoreLogger', () => {
   describe('without any middleware', () => {

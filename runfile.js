@@ -18,7 +18,7 @@ export function lint (opt) {
 }
 
 export function build () {
-  run('babel src --out-dir lib --ignore test.js')
+  run('babel src --out-dir . --ignore test.js')
 }
 
 export function coverage () {
