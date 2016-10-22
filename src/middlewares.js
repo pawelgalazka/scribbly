@@ -9,21 +9,26 @@ function wildcard (pattern, name) {
 }
 
 export function consoleStreamer (next, level, message, extras) {
+  let args = [message]
+  if (extras) {
+    args.push(extras)
+  }
+
   switch (level) {
     case levels.DEBUG:
-      console.log(message, extras)
+      console.log(...args)
       break
     case levels.INFO:
-      console.log(message, extras)
+      console.log(...args)
       break
     case levels.WARNING:
-      console.warn(message, extras)
+      console.warn(...args)
       break
     case levels.ERROR:
-      console.error(message, extras)
+      console.error(...args)
       break
     case levels.CRITICAL:
-      console.error(message, extras)
+      console.error(...args)
       break
   }
   next(level, message, extras)
@@ -39,21 +44,26 @@ export function enableWhen (isOn) {
 
 export function externalLogger (logger) {
   return (next, level, message, extras) => {
+    let args = [message]
+    if (extras) {
+      args.push(extras)
+    }
+
     switch (level) {
       case levels.DEBUG:
-        logger.debug(message, extras)
+        logger.debug(...args)
         break
       case levels.INFO:
-        logger.info(message, extras)
+        logger.info(...args)
         break
       case levels.WARNING:
-        logger.warning(message, extras)
+        logger.warning(...args)
         break
       case levels.ERROR:
-        logger.error(message, extras)
+        logger.error(...args)
         break
       case levels.CRITICAL:
-        logger.critical(message, extras)
+        logger.critical(...args)
         break
     }
     next(message, extras)

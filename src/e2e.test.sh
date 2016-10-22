@@ -23,4 +23,4 @@ echo 'Installing scribbly'
 npm install ../
 
 echo 'Running testing module'
-node index.js
+DEBUG=* node index.js
