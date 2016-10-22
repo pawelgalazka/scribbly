@@ -37,7 +37,7 @@ streaming middleware logs won't be emitted or written.
 
 For each logging, *scribbly* goes through a chain of middlewares in the same order how
 they were defined by `use` method. Middlewares are just pure functions which can
-modify the message (format), emit it to the console/file (stream) or prevent it from 
+modify the message (formatter), emit it to the console/file (streamer) or prevent it from 
 further emission to the rest of the chain (filter). However they can actually do 
 anything, they are just functions.
 
@@ -63,29 +63,75 @@ when in one module you can store the main logger, import it to other modules and
 add new middlewares there if needed without any modifications to the original 
 logger.
 
+**Order**
+
+We can distinguish 3 types of middleware: *filter, formatter and streamer*. Order in which
+those are applied is very important. If *streamer* will be added earlier than
+*filter* or *formatter* it means that those 2 will have no effect on the log emission
+through the *streamer*.
+
 ## Predefined middlewares
 
 ```javascript
 import { ... } from 'scribbly/middlewares'
 ```
 
-**consoleStream**
+**consoleStreamer**
 
 Emit log to the output using `console.log`, `console.warn` or `console.error` depend on log
 level.
 
-    scribbly.use(consoleStream)
+    scribbly.use(consoleStreamer)
     
     
-**levelFilter**
+**levelFilter(minLevel)**
 
-It passes only logs which are equal or higher than given level.
+Passes only logs which are equal or higher than given level.
 
-```
+```javascript
 import scribbly, { levels } from 'scribbly'
 
 scribbly.use(levelFilter(levels.ERROR))
 ```
+
+**namespace(name, format = '[{name}] ')**
+
+Defines namespace and adds it to the log
+
+```javascript
+const log = scribbly.use(namespace('moduleA')).use(consoleStreamer)
+log.info('test')
+```
     
+Output:
+
+    [moduleA] test
     
+**namespaceFilter(name[..., name2])**
+
+Passes only logs with given namespaces. Cooperates with `namespace` middleware and it
+needs to be applied after it.
+
+    export DEBUG=n1,n2
+
+```javascript
+scribbly.use(namespaceFilter(...process.env.DEBUG.split(',')))
+```
+
+or just
+
+```javascript
+scribbly.use(namespaceFilter('n1', 'n2'))
+```
+
+
+**enableWhen(isOn)**
+
+Passes logs only when `isOn` is `true`. Useful when we want to disable/enable logs to
+a certain condition. Should be applied as first.
+
+    scribbly.use(enableWhen(process.env.DEBUG))
+
 ## Api
+
+## Recipes
