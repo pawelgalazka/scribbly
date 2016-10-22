@@ -1,6 +1,6 @@
 /* eslint-env jest */
 import log, { levels } from '../index'
-import { levelFilter, consoleStream } from '../middleware'
+import { levelFilter, consoleStreamer } from '../middleware'
 
 describe('middleware', () => {
   let logger, calls
@@ -26,7 +26,7 @@ describe('middleware', () => {
   describe('consoleStream', () => {
     beforeEach(() => {
       calls = []
-      logger = log.use(consoleStream)
+      logger = log.use(consoleStreamer)
         .use((next, level) => {
           calls.push(level)
         })

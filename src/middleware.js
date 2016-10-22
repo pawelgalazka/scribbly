@@ -8,7 +8,7 @@ export function levelFilter (minLevel) {
   }
 }
 
-export function consoleStream (next, level, message, extras) {
+export function consoleStreamer (next, level, message, extras) {
   switch (level) {
     case levels.DEBUG:
       console.log(message, extras)
