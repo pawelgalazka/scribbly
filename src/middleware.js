@@ -1,5 +1,26 @@
 import { levels } from './index'
 
+export function consoleStreamer (next, level, message, extras) {
+  switch (level) {
+    case levels.DEBUG:
+      console.log(message, extras)
+      break
+    case levels.INFO:
+      console.log(message, extras)
+      break
+    case levels.WARNING:
+      console.warn(message, extras)
+      break
+    case levels.ERROR:
+      console.error(message, extras)
+      break
+    case levels.CRITICAL:
+      console.error(message, extras)
+      break
+  }
+  next(level, message, extras)
+}
+
 export function enableWhen (isOn) {
   return (next, level, message, extras) => {
     if (isOn) {
@@ -39,23 +60,9 @@ export function levelFilter (minLevel) {
   }
 }
 
-export function consoleStreamer (next, level, message, extras) {
-  switch (level) {
-    case levels.DEBUG:
-      console.log(message, extras)
-      break
-    case levels.INFO:
-      console.log(message, extras)
-      break
-    case levels.WARNING:
-      console.warn(message, extras)
-      break
-    case levels.ERROR:
-      console.error(message, extras)
-      break
-    case levels.CRITICAL:
-      console.error(message, extras)
-      break
+export function namespace (name, format = '[{name}] ') {
+  return (next, level, message, extras) => {
+    let prefix = format.replace(/\{name\}/g, name)
+    next(`${prefix}${message}`, extras)
   }
-  next(level, message, extras)
 }
