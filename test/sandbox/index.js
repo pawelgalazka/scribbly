@@ -13,4 +13,4 @@ const log4 = scribbly
 log1.info('log1')
 log2.info('log2')
 log3.info('ignored log')
-log4.info('log4')
+log4.info('log4', {extras: 'abc'})

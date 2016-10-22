@@ -31,7 +31,7 @@ export function consoleStreamer (next, level, message, extras) {
       console.error(...args)
       break
   }
-  next(level, message, extras)
+  next(message, extras)
 }
 
 export function enableWhen (isOn) {
@@ -72,7 +72,11 @@ export function externalLogger (logger) {
 
 export function fileStreamer (fs, path) {
   return (next, level, message, extras) => {
-    fs.writeFileSync(path, message)
+    let messageToFile = message
+    if (extras) {
+      messageToFile += ' ' + JSON.stringify(extras)
+    }
+    fs.writeFileSync(path, messageToFile)
     next(message, extras)
   }
 }
