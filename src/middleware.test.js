@@ -99,6 +99,12 @@ describe('middleware', () => {
         expect(calls).toEqual([[20, '[n2:sub:s1] test message']])
       })
 
+      it('should pass any log when general wildcard given', () => {
+        logger = log.use(namespace('n2:sub:s1', '[{name}] ', '*')).use(registerCalls)
+        logger.info('test message')
+        expect(calls).toEqual([[20, '[n2:sub:s1] test message']])
+      })
+
       it('should emit the log with custom namespace prefix', () => {
         logger = log.use(namespace('n1', '{name}: ', DEBUG)).use(registerCalls)
         logger.info('test message')
