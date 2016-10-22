@@ -141,7 +141,10 @@ Passes logs only if given namespace is found within `DEBUG` global. `DEBUG` glob
 should be a string which represents list of namespaces seperated by comma. Wildcards
 are respected. The middleware also adds namespace name to the log message as a prefix.
 
-    export DEBUG=n1,n2:sub:* // in the terminal when node
+It works in a isomorphic nature and it uses different `DEBUG` global on different 
+environments (browser/node):
+
+    export DEBUG=n1,n2:sub:* // in the terminal when node (access through process.env.DEBUG)
     window.DEBUG=n1,n2:sub:* // in the browser when client
 
 ```javascript
