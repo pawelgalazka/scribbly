@@ -3,6 +3,7 @@ import log, { levels } from '../index'
 import {
   enableWhen,
   externalLogger,
+  fileStreamer,
   levelFilter,
   namespace
 } from '../middleware'
@@ -53,6 +54,26 @@ describe('middleware', () => {
       expect(mLogger.warning.mock.calls).toEqual([['w', undefined]])
       expect(mLogger.error.mock.calls).toEqual([['e', undefined]])
       expect(mLogger.critical.mock.calls).toEqual([['c', undefined]])
+    })
+  })
+
+  describe('fileStreamer', () => {
+    let fakeFs
+
+    beforeEach(() => {
+      fakeFs = {
+        writeFileSync: jest.fn()
+      }
+      logger = log.use(fileStreamer(fakeFs, './logs.txt')).use(registerCalls)
+    })
+
+    it('should write logs to a file', () => {
+      logger.info('t1')
+      logger.info('t2')
+      expect(fakeFs.writeFileSync.mock.calls).toEqual([
+        ['./logs.txt', 't1'],
+        ['./logs.txt', 't2']
+      ])
     })
   })
 

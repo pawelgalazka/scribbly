@@ -60,6 +60,13 @@ export function externalLogger (logger) {
   }
 }
 
+export function fileStreamer (fs, path) {
+  return (next, level, message, extras) => {
+    fs.writeFileSync(path, message)
+    next(message, extras)
+  }
+}
+
 export function levelFilter (minLevel) {
   return (next, level, message, extras) => {
     if (level >= minLevel) {

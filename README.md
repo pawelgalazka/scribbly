@@ -118,11 +118,15 @@ that kind of interface before.
     scribbly.use(externalLogger(rollbarBrowserLogger))
     
     
-#### fileStreamer(filePath)
+#### fileStreamer(fs, filePath)
 
 Only for node. Logs to a given file. If file does not exist it creates it.
 
-    scribbly.use(fileStreamer('./logs.txt'))
+```javascript
+import fs from 'fs'
+
+scribbly.use(fileStreamer(fs, './logs.txt'))
+```
     
 #### levelFilter(minLevel)
 
