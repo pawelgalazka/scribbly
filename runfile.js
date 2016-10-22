@@ -1,12 +1,14 @@
 import { run } from 'runjs'
 
 export function test (opt) {
-  if (opt === 'watch') {
-    run('jest --watch')
-  } else {
+  if (opt !== 'e2e') {
     lint()
     build()
     run('jest')
+  }
+
+  if (opt !== 'fast') {
+    run('sh src/e2e.test.sh')
   }
 }
 
