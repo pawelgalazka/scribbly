@@ -62,17 +62,17 @@ describe('middleware', () => {
 
     beforeEach(() => {
       fakeFs = {
-        writeFileSync: jest.fn()
+        appendFileSync: jest.fn()
       }
       logger = log.use(fileStreamer(fakeFs, './logs.txt')).use(registerCalls)
     })
 
     it('should write logs to a file', () => {
       logger.info('t1')
-      logger.info('t2')
-      expect(fakeFs.writeFileSync.mock.calls).toEqual([
-        ['./logs.txt', 't1'],
-        ['./logs.txt', 't2']
+      logger.info('t2', {extras: 'abc'})
+      expect(fakeFs.appendFileSync.mock.calls).toEqual([
+        ['./logs.txt', 't1\n'],
+        ['./logs.txt', 't2 {"extras":"abc"}\n']
       ])
     })
   })

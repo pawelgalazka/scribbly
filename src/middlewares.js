@@ -76,7 +76,8 @@ export function fileStreamer (fs, path) {
     if (extras) {
       messageToFile += ' ' + JSON.stringify(extras)
     }
-    fs.writeFileSync(path, messageToFile)
+    messageToFile += '\n'
+    fs.appendFileSync(path, messageToFile)
     next(message, extras)
   }
 }
