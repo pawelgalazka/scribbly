@@ -31,9 +31,10 @@ log.info(`[${code}] test message`)
 For each logging *scribbly* goes through a chain of middlewares, earlier defined 
 by `use` method. Middlewares are just pure functions which can for example modify the 
 message (format), emit it to the console/file (stream) or prevent it from further 
-emission to the rest of middlewares (filter). They actually can do anything.
+emission to the rest of middlewares (filter). However they can actually do anything, 
+they are just functions.
 
-Construction of the middleware:
+**Construction**
 
 ```javascript
 const log = scribbly.use((next, level, message, extras) => {
@@ -47,7 +48,7 @@ const log = scribbly.use((next, level, message, extras) => {
 - `message` - main message, can be a string or any other type
 - `extras` - extra data, can be any type
 
-Examples of middlewares:
+**Examples**
 
 ```javascript
 import scribbly, { levels } from 'scribbly'
@@ -61,7 +62,11 @@ function levelFilter (minLevel) {
   }
 }
 
-let log = scribbly.use(levelFilter(levels.ERROR))
+const log = scribbly.use(levelFilter(levels.ERROR))
+```
+
+```javascript
+import scribbly, { levels } from 'scribbly'
 
 // Emit the log to the console
 function consoleStream (next, level, message, extras) {
@@ -84,6 +89,8 @@ function consoleStream (next, level, message, extras) {
   }
   next(level, message, extras)
 }
+
+const log = scribbly.use(consoleStream)
 ```
 
 Examples above are already predefined in `scribbly/middlewares` module.
