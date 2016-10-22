@@ -26,12 +26,19 @@ const code = 101
 log.info(`[${code}] test message`)
 ```
 
+Output:
+
+    [moduleA] [101] test message
+    
+Keep in mind that without any middleware scribbly actually won't do anything and without
+streaming middleware logs won't be emitted or written.
+
 ## Middlewares
 
 For each logging, *scribbly* goes through a chain of middlewares in the same order how
 they were defined by `use` method. Middlewares are just pure functions which can
 modify the message (format), emit it to the console/file (stream) or prevent it from 
-further emission to the rest of middlewares (filter). However they can actually do 
+further emission to the rest of the chain (filter). However they can actually do 
 anything, they are just functions.
 
 **Construction**
@@ -48,55 +55,37 @@ const log = scribbly.use((next, level, message, extras) => {
 - `message` - main message, can be a string or any other type
 - `extras` - extra data, can be any type
 
+**Immutability**
+
 Every time when `use` method is called it returns a new logger object with freshly defined
 middleware and the middlewares from the previous logger. This have nice implications 
 when in one module you can store the main logger, import it to other modules and
 add new middlewares there if needed without any modifications to the original 
 logger.
 
-**Examples**
+## Predefined middlewares
 
 ```javascript
-import scribbly, { levels } from 'scribbly'
-
-// Filter logs, passing the ones with >= minLevel
-function levelFilter (minLevel) {
-  return (next, level, message, extras) => {
-    if (level >= minLevel) {
-      next(level, message, extras)
-    }
-  }
-}
-
-const log = scribbly.use(levelFilter(levels.ERROR))
+import { ... } from 'scribbly/middlewares'
 ```
 
-```javascript
+**consoleStream**
+
+Emit log to the output using `console.log`, `console.warn` or `console.error` depend on log
+level.
+
+    scribbly.use(consoleStream)
+    
+    
+**levelFilter**
+
+It passes only logs which are equal or higher than given level.
+
+```
 import scribbly, { levels } from 'scribbly'
 
-// Emit the log to the console
-function consoleStream (next, level, message, extras) {
-  switch (level) {
-    case levels.DEBUG:
-      console.log(message, extras)
-      break
-    case levels.INFO:
-      console.log(message, extras)
-      break
-    case levels.WARNING:
-      console.warn(message, extras)
-      break
-    case levels.ERROR:
-      console.error(message, extras)
-      break
-    case levels.CRITICAL:
-      console.error(message, extras)
-      break
-  }
-  next(level, message, extras)
-}
-
-const log = scribbly.use(consoleStream)
+scribbly.use(levelFilter(levels.ERROR))
 ```
-
-Examples above are already predefined in `scribbly/middlewares` module.
+    
+    
+## Api
