@@ -173,7 +173,7 @@ It adds time information to the message.
     
 ## Recipes
 
-**Production and development logging**
+#### Production and development logging
 
 Common situation is when we want to log errors on production to error reporting service like
 *Rollbar* but for development environment use console instead to make errors visible 
