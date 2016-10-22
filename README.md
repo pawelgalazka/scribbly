@@ -15,8 +15,6 @@ This allows broad flexibility and it keeps api simple.
   - [namespace](#namespacename-format--name-)
   - [timeFormatter](#timeformatter)
 
-- [Recipes](#recipes)
-  - [Production and development logging](#production-and-development-logging)
 - [Api](#api)
   - [Logger](#logger)
   - [levels](#levels)
@@ -28,27 +26,73 @@ Installation:
     npm install scribbly --save
     
 
-Log messages to the console:
+**Simple logging to the console**
 
 ```javascript
 import scribbly from 'scribbly'
-import { namespace, consoleStream } from 'scribbly/middlewares'
+import { consoleStreamer } from 'scribbly/middlewares'
 
-const log = scribbly
-  .use(namespace('moduleA'))
-  .use(consoleStream)
+const log = scribbly.use(consoleStreamer)
 
-const code = 101
-
-log.info(`[${code}] test message`)
+log.debug('Hello')
+log.info('Hello')
+log.warning('Hello')
+log.error('Hello')
+log.critical('Hello')
 ```
 
+**Using namespaces**
+
+```javascript
+import scribbly from 'scribbly'
+import { consoleStreamer, namespace } from 'scribbly/middlewares'
+
+const n1 = scribbly.use(namespace('n1')).use(consoleStreamer)
+const n2 = scribbly.use(namespace('n2')).use(consoleStreamer)
+
+n1.info('Hello from n1')
+n2.info('Hello from n2')
+```
+
+    export DEBUG=n1,n3 // or window.DEBUG=n1,n3 in the browser
+    
 Output:
 
-    [moduleA] [101] test message
+    [n1] Hello from n1
     
+**Adjusting logging strategy**
+
+It's common to log production errors to error reporting services like Rollbar but for 
+development log them to console. We can easily apply different middlewares on 
+different conditions to make that possible.
+
+*logger.js*l service
+```javascript
+import scribbly from 'scribbly'
+import rollbar from 'rollbar-browser'
+import { consoleStreamer } from 'scribbly/middleware'
+
+let logger
+
+if (process.env.NODE_ENV === 'production') {
+  let rollbarLogger = rollbar.init(someConfig)
+  logger = scribbly.use(externalLogger(rollbarLogger))
+} else {
+  logger = scribbly.use(consoleStreamer)
+}
+
+export default logger
+```
+
+```javascript
+import log from './logger'
+
+log.error('Some error')
+```
+
+
 Keep in mind that without any middleware scribbly actually won't do anything and without
-streaming middleware logs won't be emitted or written.
+streaming middleware like `consoleStreamer` logs won't be emitted or written.
 
 ## Middlewares
 
@@ -170,39 +214,6 @@ It adds time information to the message.
 
     scribbly.use(timeFormatter)
     
-## Recipes
-
-#### Production and development logging
-
-Common situation is when we want to log errors on production to error reporting service like
-*Rollbar* but for development environment use console instead to make errors visible 
-for the developer.
-
-*logger.js*
-```javascript
-import scribbly from 'scribbly'
-import rollbar from 'rollbar-browser'
-import { consoleStreamer } from 'scribbly/middleware'
-
-let logger
-
-if (process.env.NODE_ENV === 'production') {
-  let rollbarLogger = rollbar.init(someConfig)
-  logger = scribbly.use(externalLogger(rollbarLogger))
-} else {
-  logger = scribbly.use(consoleStreamer)
-}
-
-export default logger
-```
-
-```javascript
-import log from './logger'
-
-log.error('Some error')
-```
-
-As you can see we can easily apply different middlewares on different conditions.
 
 ## Api
 
