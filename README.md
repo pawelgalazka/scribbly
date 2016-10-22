@@ -1,19 +1,19 @@
 # scribbly ![node version](https://img.shields.io/node/v/scribbly.svg) [![Build Status](https://travis-ci.org/pawelgalazka/scribbly.svg?branch=master)](https://travis-ci.org/pawelgalazka/scribbly) [![npm version](https://badge.fury.io/js/scribbly.svg)](https://badge.fury.io/js/scribbly)
 
-Scribbly it's a simple isomorphic logging tool which is based on middleware system. 
+Scribbly is a simple isomorphic logging tool which is based on middleware system. 
 Management and construction of middlewares is very similar to the ones in *expressjs*. 
 This allows broad flexibility and it keeps api simple.
 
 - [Quick start](#quick-start)
 - [Middlewares](#middlewares)
 - [Predefined middlewares](#predefined-middlewares)
-  - [consoleStreamer](#consoleStreamer)
-  - [enableWhen](#enablewhen)
-  - [externalLogger](#externallogger)
-  - [fileStreamer](#fileStreamer)
-  - [levelFilter](#levelfilter)
-  - [namespace](#namespace)
-  - [namespaceFilter](#namespacefilter)
+  - [consoleStreamer](#consolestreamer)
+  - [enableWhen](#enablewhenison)
+  - [externalLogger](#externalloggerlogger)
+  - [fileStreamer](#filestreamerfilepath)
+  - [levelFilter](#levelfilterminlevel)
+  - [namespace](#namespacename-format--name-)
+  - [namespaceFilter](#namespacefiltername-name2)
   - [timeFormatter](#timeformatter)
 
 - [Recipes](#recipes)
@@ -71,7 +71,7 @@ const log = scribbly.use((next, level, message, extras) => {
 - `next` - {Function} calls the next middleware from the chain. If not called it breaks the chain.
 - `level` - {Number} level of the log
 - `message` - main message, can be a string or any other type
-- `extras` - extra data, can be any type
+- `extras` - optional extra data, can be any type
 
 **Immutability**
 
@@ -87,7 +87,7 @@ We can distinguish 3 types of middleware: *filter, formatter and streamer*. Orde
 those are applied is very important. If *streamer* will be added earlier than
 *filter* or *formatter* it means that those 2 will have no effect on the log emission
 through the *streamer*. Unless it is intended it is a good practice to add streamers
-as the last ones.
+as the last ones to the middlewares chain.
 
 ## Predefined middlewares
 
