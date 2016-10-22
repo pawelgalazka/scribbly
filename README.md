@@ -99,7 +99,7 @@ streaming middleware like `consoleStreamer` logs won't be emitted or written.
 For each logging, *scribbly* goes through a chain of middlewares in the same order how
 they were defined by `use` method. Middlewares are just pure functions which can
 modify the message (formatter), emit it to the console/file (streamer) or prevent it from 
-further emission to the rest of the chain (filter). However they can actually do 
+further emission to the rest of the chain (filter). Having that said they can actually do 
 anything, they are just functions.
 
 **Construction**
