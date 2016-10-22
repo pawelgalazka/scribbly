@@ -3,7 +3,7 @@ import { levels } from './index'
 export function levelFilter (minLevel) {
   return (next, level, message, extras) => {
     if (level >= minLevel) {
-      next(level, message, extras)
+      next(message, extras)
     }
   }
 }
