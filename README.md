@@ -68,7 +68,8 @@ logger.
 We can distinguish 3 types of middleware: *filter, formatter and streamer*. Order in which
 those are applied is very important. If *streamer* will be added earlier than
 *filter* or *formatter* it means that those 2 will have no effect on the log emission
-through the *streamer*.
+through the *streamer*. Unless it is intended it is a good practice to add streamers
+as the last ones.
 
 ## Predefined middlewares
 
@@ -139,8 +140,90 @@ Logs to a given logger. It is expected that external logger should provide metho
 that kind of interface before.
 
     scribbly.use(externalLogger(rollbarBrowserLogger))
+    
+    
+**fileStreamer(filePath)**
+
+Only for node. Logs to a given file. If file does not exist it creates it.
+
+    scribbly.use(fileStreamer('./logs.txt'))
+    
+**timeFormatter**
+
+It adds time information to the message.
+
+    scribbly.use(timeFormatter)
 
 ## Api
+
+### Logger
+
+```javascript
+import { Logger } from 'scribbly'
+```
+
+Main class of the scribbly logger. Instance of it can by imported by 
+`import scribbly from 'scribbly'`. It's the same as `const scribbly = new Logger()`.
+
+**constructor(middlewares = [])**
+
+Creates logger and set an Array of middlewares.
+
+**middlewares**
+
+Property. Array of middlewares. Can't be modified, it's frozen.
+
+**use(middleware)**
+
+Returns a new logger with combined old middlewares and the new one. 
+
+    return new Logger(this.middlewares.concat(middleware))
+    
+**log(level, message, extras)**
+
+Emit the message with extras through middlewares, in order.
+
+- `level` - {Number} level of the log
+- `message` - Any type, main content of the log
+- `extras` - Any type, optional data
+
+**debug(message, extras)**
+
+Same as `log(levels.DEBUG, message, extras)`.
+
+**info(message, extras)**
+
+Same as `log(levels.INFO, message, extras)`.
+
+**warning(message, extras)**
+
+Same as `log(levels.WARNING, message, extras)`.
+
+**error(message, extras)**
+
+Same as `log(levels.ERROR, message, extras)`.
+
+**critical(message, extras)**
+
+Same as `log(levels.CRITICAL, message, extras)`.
+
+### levels
+
+```javascript
+import { levels } from 'scribly'
+```
+
+Stores a set of constants which stores numerical representation of logging levels.
+
+```javascript
+export const levels = {
+  DEBUG: 10,
+  INFO: 20,
+  WARNING: 30,
+  ERROR: 40,
+  CRITICAL: 50
+}
+```
 
 ## Recipes
 
@@ -173,4 +256,6 @@ import log from './logger'
 
 log.error('Some error')
 ```
+
+As you can see we can easily apply different middlewares on different conditions.
 
