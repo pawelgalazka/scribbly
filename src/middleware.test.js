@@ -1,6 +1,12 @@
 /* eslint-env jest */
 import log, { levels } from '../index'
-import { enableWhen, externalLogger, levelFilter, namespace } from '../middleware'
+import {
+  enableWhen,
+  externalLogger,
+  levelFilter,
+  namespace,
+  namespaceFilter
+} from '../middleware'
 
 describe('middleware', () => {
   let logger, calls
@@ -79,6 +85,24 @@ describe('middleware', () => {
         .use(registerCalls)
       logger.info('test message')
       expect(calls).toEqual([[20, 'n1: test message']])
+    })
+  })
+
+  describe.skip('namespaceFilter', () => {
+    it('should pass log from expected namespace', () => {
+      logger = log.use(namespace('n1'))
+        .use(namespaceFilter('n1', 'n2'))
+        .use(registerCalls)
+      logger.info('test message')
+      expect(calls).toEqual([[20, '[n1] test message']])
+    })
+
+    it('should block log from unexpected namespace', () => {
+      logger = log.use(namespace('n3'))
+        .use(namespaceFilter('n1', 'n2'))
+        .use(registerCalls)
+      logger.info('test message')
+      expect(calls).toEqual([])
     })
   })
 })

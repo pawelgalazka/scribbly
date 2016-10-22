@@ -66,3 +66,9 @@ export function namespace (name, format = '[{name}] ') {
     next(`${prefix}${message}`, extras)
   }
 }
+
+export function namespaceFilter (...namespaces) {
+  return (next, level, message, extras) => {
+
+  }
+}
