@@ -17,7 +17,8 @@ This allows broad flexibility and it keeps api simple.
   - [timeFormatter](#timeformatter)
 
 - [Recipes](#recipes)
-- [Api](#utilities)
+  - [Production and development logging](#production-and-development-logging)
+- [Api](#api)
   - [Logger](#logger)
   - [levels](#levels)
 
@@ -94,7 +95,7 @@ as the last ones.
 import { ... } from 'scribbly/middlewares'
 ```
 
-**consoleStreamer**
+#### consoleStreamer
 
 Emit log to the output using `console.log`, `console.warn` or `console.error` depend on log
 level.
@@ -102,7 +103,29 @@ level.
     scribbly.use(consoleStreamer)
     
     
-**levelFilter(minLevel)**
+#### enableWhen(isOn)
+
+Passes logs only when `isOn` is `true`. Useful when we want to disable/enable logs to
+a certain condition. Should be applied as first.
+
+    scribbly.use(enableWhen(process.env.DEBUG))
+    
+#### externalLogger(logger)
+
+Logs to a given logger. It is expected that external logger should provide methods:
+*debug, info, warning, error, critical*. If it doesn't it should be wrapped around
+that kind of interface before.
+
+    scribbly.use(externalLogger(rollbarBrowserLogger))
+    
+    
+#### fileStreamer(filePath)
+
+Only for node. Logs to a given file. If file does not exist it creates it.
+
+    scribbly.use(fileStreamer('./logs.txt'))
+    
+#### levelFilter(minLevel)
 
 Passes only logs which are equal or higher than given level.
 
@@ -112,7 +135,7 @@ import scribbly, { levels } from 'scribbly'
 scribbly.use(levelFilter(levels.ERROR))
 ```
 
-**namespace(name, format = '[{name}] ')**
+#### namespace(name, format = '[{name}] ')
 
 Defines namespace and adds it to the log
 
@@ -125,7 +148,7 @@ Output:
 
     [moduleA] test
     
-**namespaceFilter(name[..., name2])**
+#### namespaceFilter(name[..., name2])
 
 Passes only logs with given namespaces. Cooperates with `namespace` middleware and it
 needs to be applied after it.
@@ -142,30 +165,7 @@ or just
 scribbly.use(namespaceFilter('n1', 'n2'))
 ```
 
-
-**enableWhen(isOn)**
-
-Passes logs only when `isOn` is `true`. Useful when we want to disable/enable logs to
-a certain condition. Should be applied as first.
-
-    scribbly.use(enableWhen(process.env.DEBUG))
-    
-**externalLogger(logger)**
-
-Logs to a given logger. It is expected that external logger should provide methods:
-*debug, info, warning, error, critical*. If it doesn't it should be wrapped around
-that kind of interface before.
-
-    scribbly.use(externalLogger(rollbarBrowserLogger))
-    
-    
-**fileStreamer(filePath)**
-
-Only for node. Logs to a given file. If file does not exist it creates it.
-
-    scribbly.use(fileStreamer('./logs.txt'))
-    
-**timeFormatter**
+#### timeFormatter
 
 It adds time information to the message.
 
