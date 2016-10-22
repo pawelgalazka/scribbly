@@ -14,8 +14,10 @@
     "url": "git+https://github.com/pawelgalazka/scribbly.git"
   },
   "keywords": [
+    "logger",
     "logging",
-    "logger"
+    "log",
+    "debug"
   ],
   "author": "Pawel Galazka",
   "license": "MIT",
