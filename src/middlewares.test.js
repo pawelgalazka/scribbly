@@ -6,7 +6,7 @@ import {
   fileStreamer,
   levelFilter,
   namespace
-} from '../middleware'
+} from '../middlewares'
 
 describe('middleware', () => {
   let logger, calls
