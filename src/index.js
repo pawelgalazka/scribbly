@@ -26,6 +26,7 @@ export class CoreLogger {
         nextMiddlewares.push(middleware.bind(undefined, doNothing, level))
       }
     })
+    nextMiddlewares.reverse()
 
     if (nextMiddlewares[0]) {
       nextMiddlewares[0](message, extras)

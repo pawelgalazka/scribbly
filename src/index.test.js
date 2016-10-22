@@ -2,13 +2,14 @@
 import { CoreLogger } from '../index'
 
 describe('CoreLogger', () => {
+  let calls, logger
+
+  beforeEach(() => {
+    calls = []
+    logger = new CoreLogger()
+  })
+
   describe('without any middleware', () => {
-    let logger
-
-    beforeEach(() => {
-      logger = new CoreLogger()
-    })
-
     it('should do nothing', () => {
       logger.log(10, 'test message')
     })
@@ -27,16 +28,36 @@ describe('CoreLogger', () => {
   })
 
   describe('with middleware', () => {
+    it('should call middlewares in a right order', () => {
+      logger = logger
+        .use((next) => {
+          calls.push(1)
+          next()
+        })
+        .use((next) => {
+          calls.push(2)
+          next()
+        })
+        .use((next) => {
+          calls.push(3)
+          next()
+        })
+        .use((next) => {
+          calls.push(4)
+          next()
+        })
+      logger.info('test')
+      expect(calls).toEqual([1, 2, 3, 4])
+    })
+
     it('should be able to filter out the logs', () => {
-      let calls = []
-      const logger = new CoreLogger()
+      logger = logger
         .use((next, level, message, extras) => {
           calls.push([level, message, extras])
           next(message, extras)
         })
         .use((next, level, message, extras) => {
           calls.push([level, message, extras])
-          next(message, extras)
         })
         .use((next, level, message, extras) => {
           calls.push([level, message, extras])
@@ -51,8 +72,7 @@ describe('CoreLogger', () => {
     })
 
     it('should be able to format the logs', () => {
-      let calls = []
-      const logger = new CoreLogger()
+      logger = logger
         .use((next, level, message, extras) => {
           message = '[note] ' + message
           calls.push([level, message, extras])
