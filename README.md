@@ -137,33 +137,26 @@ scribbly.use(levelFilter(levels.ERROR))
 
 #### namespace(name, format = '[{name}] ')
 
-Defines namespace and adds it to the log
+Passes logs only if given namespace is found within `DEBUG` global. `DEBUG` global
+should be a string which represents list of namespaces seperated by comma. Wildcards
+are respected. The middleware also adds namespace name to the log message as a prefix.
+
+    export DEBUG=n1,n2:sub:* // in the terminal when node
+    window.DEBUG=n1,n2:sub:* // in the browser when client
 
 ```javascript
-const log = scribbly.use(namespace('moduleA')).use(consoleStreamer)
+const log = scribbly.use(namespace('n1')).use(consoleStreamer)
 log.info('test')
 ```
     
 Output:
 
-    [moduleA] test
+    [n1] test
     
-#### namespaceFilter(name[..., name2])
+To pass logs from all namespaces:
 
-Passes only logs with given namespaces. Cooperates with `namespace` middleware and it
-needs to be applied after it.
-
-    export DEBUG=n1,n2
-
-```javascript
-scribbly.use(namespaceFilter(...process.env.DEBUG.split(',')))
-```
-
-or just
-
-```javascript
-scribbly.use(namespaceFilter('n1', 'n2'))
-```
+    DEBUG=*
+    
 
 #### timeFormatter
 
