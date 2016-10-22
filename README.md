@@ -170,6 +170,40 @@ Only for node. Logs to a given file. If file does not exist it creates it.
 It adds time information to the message.
 
     scribbly.use(timeFormatter)
+    
+## Recipes
+
+**Production and development logging**
+
+Common situation is when we want to log errors on production to error reporting service like
+*Rollbar* but for development environment use console instead to make errors visible 
+for the developer.
+
+*logger.js*
+```javascript
+import scribbly from 'scribbly'
+import rollbar from 'rollbar-browser'
+import { consoleStreamer } from 'scribbly/middleware'
+
+let logger
+
+if (process.env.NODE_ENV === 'production') {
+  let rollbarLogger = rollbar.init(someConfig)
+  logger = scribbly.use(externalLogger(rollbarLogger))
+} else {
+  logger = scribbly.use(consoleStreamer)
+}
+
+export default logger
+```
+
+```javascript
+import log from './logger'
+
+log.error('Some error')
+```
+
+As you can see we can easily apply different middlewares on different conditions.
 
 ## Api
 
@@ -241,38 +275,4 @@ export const levels = {
   CRITICAL: 50
 }
 ```
-
-## Recipes
-
-**Production and development logging**
-
-Common situation is when we want to log errors on production to error reporting service like
-*Rollbar* but for development environment use console instead to make errors visible 
-for the developer.
-
-*logger.js*
-```javascript
-import scribbly from 'scribbly'
-import rollbar from 'rollbar-browser'
-import { consoleStreamer } from 'scribbly/middleware'
-
-let logger
-
-if (process.env.NODE_ENV === 'production') {
-  let rollbarLogger = rollbar.init(someConfig)
-  logger = scribbly.use(externalLogger(rollbarLogger))
-} else {
-  logger = scribbly.use(consoleStreamer)
-}
-
-export default logger
-```
-
-```javascript
-import log from './logger'
-
-log.error('Some error')
-```
-
-As you can see we can easily apply different middlewares on different conditions.
 
