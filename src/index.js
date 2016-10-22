@@ -16,18 +16,19 @@ export class CoreLogger {
   }
 
   log (level, message, extras) {
-    let middlewares = this.middlewares.slice()
+    // Prepare the middlewares chain
     let nextMiddlewares = []
-    middlewares.reverse()
-    middlewares.forEach((middleware) => {
-      if (nextMiddlewares.length) {
-        nextMiddlewares.push(middleware.bind(undefined, nextMiddlewares[nextMiddlewares.length - 1], level))
-      } else {
-        nextMiddlewares.push(middleware.bind(undefined, doNothing, level))
-      }
-    })
+
+    // Create the chain
+    this.middlewares.reduceRight((prevMiddleware, currMiddleware) => {
+      let boundCurrMiddleware = currMiddleware.bind(undefined, prevMiddleware, level)
+      nextMiddlewares.push(boundCurrMiddleware)
+      return boundCurrMiddleware
+    }, doNothing)
+
     nextMiddlewares.reverse()
 
+    // Run the chain
     if (nextMiddlewares[0]) {
       nextMiddlewares[0](message, extras)
     }
