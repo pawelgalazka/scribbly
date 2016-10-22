@@ -4,6 +4,23 @@ Scribbly it's a simple isomorphic logging tool which is based on middleware syst
 Management and construction of middlewares is very similar to the ones in *expressjs*. 
 This allows broad flexibility and it keeps api simple.
 
+- [Quick start](#quick-start)
+- [Middlewares](#middlewares)
+- [Predefined middlewares](#predefined-middlewares)
+  - [consoleStreamer](#consoleStreamer)
+  - [enableWhen](#enablewhen)
+  - [externalLogger](#externallogger)
+  - [fileStreamer](#fileStreamer)
+  - [levelFilter](#levelfilter)
+  - [namespace](#namespace)
+  - [namespaceFilter](#namespacefilter)
+  - [timeFormatter](#timeformatter)
+
+- [Recipes](#recipes)
+- [Api](#utilities)
+  - [Logger](#logger)
+  - [levels](#levels)
+
 ## Quick start
 
 Installation:
