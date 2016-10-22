@@ -1,6 +1,6 @@
 /* eslint-env jest */
 import log, { levels } from '../index'
-import { levelFilter } from '../middleware'
+import { enableWhen, levelFilter } from '../middleware'
 
 describe('middleware', () => {
   let logger, calls
@@ -15,7 +15,17 @@ describe('middleware', () => {
   }
 
   describe('enableWhen', () => {
+    it('should log when enabled', () => {
+      logger = log.use(enableWhen(true)).use(registerCalls)
+      logger.info('test')
+      expect(calls).toEqual([[20, 'test']])
+    })
 
+    it('should not log when disabled', () => {
+      logger = log.use(enableWhen(false)).use(registerCalls)
+      logger.info('test')
+      expect(calls).toEqual([])
+    })
   })
 
   describe('levelFilter', () => {

@@ -1,5 +1,13 @@
 import { levels } from './index'
 
+export function enableWhen (isOn) {
+  return (next, level, message, extras) => {
+    if (isOn) {
+      next(message, extras)
+    }
+  }
+}
+
 export function levelFilter (minLevel) {
   return (next, level, message, extras) => {
     if (level >= minLevel) {
