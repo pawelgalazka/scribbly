@@ -1,4 +1,12 @@
 import { levels } from './index'
+import escapeRegExp from 'lodash.escaperegexp'
+
+function wildcard (pattern, name) {
+  pattern = escapeRegExp(pattern)
+  pattern = pattern.replace(/\\\*/g, '.*')
+  pattern = new RegExp(pattern, 'g')
+  return pattern.test(name)
+}
 
 export function consoleStreamer (next, level, message, extras) {
   switch (level) {
@@ -67,11 +75,10 @@ export function namespace (name, format = '[{name}] ', debug) {
   } else if (typeof window !== 'undefined' && window.DEBUG) {
     debug = window.DEBUG
   }
-  debug = debug || ''
 
-  const allowedNamespaces = debug.split(',')
-  const matcher = (wildcard) => {
-    return wildcard === name
+  const allowedNamespaces = debug ? debug.split(',') : []
+  const matcher = (wildcardString) => {
+    return wildcard(wildcardString, name)
   }
 
   return (next, level, message, extras) => {

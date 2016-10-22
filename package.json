@@ -50,5 +50,8 @@
       "eslint-config-standard"
     ],
     "parser": "babel-eslint"
+  },
+  "dependencies": {
+    "lodash.escaperegexp": "4.1.2"
   }
 }
