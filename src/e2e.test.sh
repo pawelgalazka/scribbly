@@ -16,11 +16,12 @@ set -x
 echo 'Sandbox tests'
 cd ./sandbox
 
-echo 'Cleaning node_modules'
+echo 'Cleaning'
 rm -rf node_modules
+rm -rf log.txt
 
 echo 'Installing scribbly'
 npm install ../
 
 echo 'Running testing module'
-DEBUG=* node index.js
+DEBUG=main node index.js
