@@ -131,7 +131,46 @@ Passes logs only when `isOn` is `true`. Useful when we want to disable/enable lo
 a certain condition. Should be applied as first.
 
     scribbly.use(enableWhen(process.env.DEBUG))
+    
+**externalLogger(logger)**
+
+Logs to a given logger. It is expected that external logger should provide methods:
+*debug, info, warning, error, critical*. If it doesn't it should be wrapped around
+that kind of interface before.
+
+    scribbly.use(externalLogger(rollbarBrowserLogger))
 
 ## Api
 
 ## Recipes
+
+**Production and development logging**
+
+Common situation is when we want to log errors on production to error reporting service like
+*Rollbar* but for development environment use console instead to make errors visible 
+for the developer.
+
+*logger.js*
+```javascript
+import scribbly from 'scribbly'
+import rollbar from 'rollbar-browser'
+import { consoleStreamer } from 'scribbly/middleware'
+
+let logger
+
+if (process.env.NODE_ENV === 'production') {
+  let rollbarLogger = rollbar.init(someConfig)
+  logger = scribbly.use(externalLogger(rollbarLogger))
+} else {
+  logger = scribbly.use(consoleStreamer)
+}
+
+export default logger
+```
+
+```javascript
+import log from './logger'
+
+log.error('Some error')
+```
+
