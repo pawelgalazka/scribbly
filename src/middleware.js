@@ -89,7 +89,7 @@ export function namespace (name, format = '[{name}] ', debug) {
   }
 }
 
-export function timeFormatter(next, level, message, extras) {
+export function timeFormatter (next, level, message, extras) {
   let time = (new Date()).toLocaleString()
   next(`[${time}] ${message}`, extras)
 }
