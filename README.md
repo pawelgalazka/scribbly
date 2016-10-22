@@ -21,11 +21,9 @@ const log = scribbly
   .use(namespace('moduleA'))
   .use(consoleStream)
 
-try {
-  throw {message: 'test message', code: 101}
-} catch (error) {
-  log.error(`[code ${error.code}] ${message}`)
-}
+const code = 101
+
+log.info(`[${code}] test message`)
 ```
 
 ## Middlewares
@@ -87,3 +85,5 @@ function consoleStream (next, level, message, extras) {
   next(level, message, extras)
 }
 ```
+
+Examples above are already predefined in `scribbly/middlewares` module.
