@@ -43,7 +43,7 @@ log.critical('Hello')
 
 **Using namespaces**
 
-    export DEBUG=n1,n3 // or window.DEBUG=n1,n3 in the browser
+    export DEBUG=n1,n3 # or window.DEBUG=n1,n3 in the browser
     
 ```javascript
 import scribbly from 'scribbly'
