@@ -27,8 +27,8 @@ export class CoreLogger {
       }
     })
 
-    if (nextMiddlewares[1]) {
-      nextMiddlewares[1](message, extras)
+    if (nextMiddlewares[0]) {
+      nextMiddlewares[0](message, extras)
     }
   }
 
