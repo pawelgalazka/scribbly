@@ -13,7 +13,6 @@ This allows broad flexibility and it keeps api simple.
   - [fileStreamer](#filestreamerfilepath)
   - [levelFilter](#levelfilterminlevel)
   - [namespace](#namespacename-format--name-)
-  - [namespaceFilter](#namespacefiltername-name2)
   - [timeFormatter](#timeformatter)
 
 - [Recipes](#recipes)
