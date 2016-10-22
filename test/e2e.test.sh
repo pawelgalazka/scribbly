@@ -14,14 +14,14 @@ trap 'set +x; handle_error $LINENO $BASH_COMMAND' ERR
 set -x
 
 echo 'Sandbox tests'
-cd ./sandbox
+cd ./test/sandbox
 
 echo 'Cleaning'
 rm -rf node_modules
 rm -rf log.txt
 
 echo 'Installing scribbly'
-npm install ../
+npm install ../../
 
 echo 'Running testing module'
 DEBUG=main node index.js

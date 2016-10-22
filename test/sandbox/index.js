@@ -10,7 +10,7 @@ const log4 = scribbly
   .use(m.consoleStreamer)
   .use(m.fileStreamer(fs, './log.txt'))
 
-log1.info('log1 test')
-log2.info('log2 test')
-log3.info('log3 test (should be ignored)')
-log4.info('timed')
+log1.info('log1')
+log2.info('log2')
+log3.info('ignored log')
+log4.info('log4')

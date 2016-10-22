@@ -3,4 +3,4 @@ node_modules
 /coverage
 /index.js
 /middlewares.js
-/sandbox/log.txt
+/test/sandbox/log.txt
