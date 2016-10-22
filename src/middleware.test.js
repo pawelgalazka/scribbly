@@ -4,8 +4,7 @@ import {
   enableWhen,
   externalLogger,
   levelFilter,
-  namespace,
-  namespaceFilter
+  namespace
 } from '../middleware'
 
 describe('middleware', () => {
@@ -73,36 +72,38 @@ describe('middleware', () => {
   })
 
   describe('namespace', () => {
-    it('should add namespace name before the message', () => {
-      logger = log.use(namespace('n1'))
-        .use(registerCalls)
-      logger.info('test message')
-      expect(calls).toEqual([[20, '[n1] test message']])
+    describe('when DEBUG global is undefined', () => {
+      it('should not emit the log', () => {
+        logger = log.use(namespace('n1')).use(registerCalls)
+        logger.info('test message')
+        expect(calls).toEqual([])
+      })
     })
 
-    it('should add namespace name with custom format', () => {
-      logger = log.use(namespace('n1', '{name}: '))
-        .use(registerCalls)
-      logger.info('test message')
-      expect(calls).toEqual([[20, 'n1: test message']])
-    })
-  })
+    describe('when DEBUG global is present', () => {
+      let DEBUG
 
-  describe.skip('namespaceFilter', () => {
-    it('should pass log from expected namespace', () => {
-      logger = log.use(namespace('n1'))
-        .use(namespaceFilter('n1', 'n2'))
-        .use(registerCalls)
-      logger.info('test message')
-      expect(calls).toEqual([[20, '[n1] test message']])
-    })
+      beforeEach(() => {
+        DEBUG = 'n1,n2:sub:*'
+      })
 
-    it('should block log from unexpected namespace', () => {
-      logger = log.use(namespace('n3'))
-        .use(namespaceFilter('n1', 'n2'))
-        .use(registerCalls)
-      logger.info('test message')
-      expect(calls).toEqual([])
+      it('should emit the log with namespace name as a prefix', () => {
+        logger = log.use(namespace('n1', '[{name}] ', DEBUG)).use(registerCalls)
+        logger.info('test message')
+        expect(calls).toEqual([[20, '[n1] test message']])
+      })
+
+      it.skip('should emit the log when namespace name matches given wildcard', () => {
+        logger = log.use(namespace('n2:sub:s1', '[{name}] ', DEBUG)).use(registerCalls)
+        logger.info('test message')
+        expect(calls).toEqual([[20, '[n2:sub:s1] test message']])
+      })
+
+      it('should emit the log with custom namespace prefix', () => {
+        logger = log.use(namespace('n1', '{name}: ', DEBUG)).use(registerCalls)
+        logger.info('test message')
+        expect(calls).toEqual([[20, 'n1: test message']])
+      })
     })
   })
 })

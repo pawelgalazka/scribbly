@@ -60,15 +60,24 @@ export function levelFilter (minLevel) {
   }
 }
 
-export function namespace (name, format = '[{name}] ') {
-  return (next, level, message, extras) => {
-    let prefix = format.replace(/\{name\}/g, name)
-    next(`${prefix}${message}`, extras)
+export function namespace (name, format = '[{name}] ', debug) {
+  // Reading DEBUG global in an isomorphic manner
+  if (typeof process !== 'undefined' && process.env && process.env.DEBUG) {
+    debug = process.env.DEBUG
+  } else if (typeof window !== 'undefined' && window.DEBUG) {
+    debug = window.DEBUG
   }
-}
+  debug = debug || ''
 
-export function namespaceFilter (...namespaces) {
+  const allowedNamespaces = debug.split(',')
+  const matcher = (wildcard) => {
+    return wildcard === name
+  }
+
   return (next, level, message, extras) => {
-
+    if (allowedNamespaces.some(matcher)) {
+      const prefix = format.replace(/\{name\}/g, name)
+      next(`${prefix}${message}`, extras)
+    }
   }
 }
