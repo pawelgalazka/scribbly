@@ -8,7 +8,7 @@ export function test (opt) {
   }
 
   if (opt !== 'fast') {
-    run('sh test/e2e.test.sh')
+    run('bash test/e2e.test.sh')
   }
 }
 
