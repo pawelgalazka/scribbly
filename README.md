@@ -29,7 +29,7 @@ Installation:
 **Simple logging to the console**
 
 ```javascript
-import scribbly from 'scribbly'
+import scribbly from 'scribbly' // const scribbly = require('scribbly').default
 import { consoleStreamer } from 'scribbly/middlewares'
 
 const log = scribbly.use(consoleStreamer)
