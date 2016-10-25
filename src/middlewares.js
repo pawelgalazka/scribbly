@@ -1,4 +1,4 @@
-import { levels } from './index'
+import { levels } from './core'
 import escapeRegExp from 'lodash.escaperegexp'
 
 function wildcard (pattern, name) {

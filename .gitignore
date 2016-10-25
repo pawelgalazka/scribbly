@@ -3,4 +3,5 @@ node_modules
 /coverage
 /index.js
 /middlewares.js
+/core.js
 /test/sandbox/log.txt

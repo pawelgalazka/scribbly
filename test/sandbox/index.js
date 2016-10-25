@@ -1,4 +1,4 @@
-const scribbly = require('scribbly').default
+const scribbly = require('scribbly')
 const m = require('scribbly/middlewares')
 const fs = require('fs')
 

@@ -1,5 +1,6 @@
 /* eslint-env jest */
-import log, { levels } from '../index'
+import log from '../index'
+import { levels } from '../core'
 import {
   enableWhen,
   externalLogger,
