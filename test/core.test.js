@@ -54,7 +54,7 @@ describe('CoreLogger', () => {
       logger = logger
         .use((next, level, message, extras) => {
           calls.push([level, message, extras])
-          next(message, extras)
+          next(level, message, extras)
         })
         .use((next, level, message, extras) => {
           calls.push([level, message, extras])
@@ -76,12 +76,12 @@ describe('CoreLogger', () => {
         .use((next, level, message, extras) => {
           message = '[note] ' + message
           calls.push([level, message, extras])
-          next(message, extras)
+          next(level, message, extras)
         })
         .use((next, level, message, extras) => {
           message = message + ' [suffix]'
           calls.push([level, message, extras])
-          next(message, extras)
+          next(level, message, extras)
         })
 
       expect(logger.middlewares.length).toEqual(2)

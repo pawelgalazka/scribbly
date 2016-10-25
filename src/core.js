@@ -21,7 +21,7 @@ export class CoreLogger {
 
     // Create the chain
     this.middlewares.reduceRight((prevMiddleware, currMiddleware) => {
-      let boundCurrMiddleware = currMiddleware.bind(undefined, prevMiddleware, level)
+      let boundCurrMiddleware = currMiddleware.bind(undefined, prevMiddleware)
       nextMiddlewares.push(boundCurrMiddleware)
       return boundCurrMiddleware
     }, doNothing)
@@ -30,7 +30,7 @@ export class CoreLogger {
 
     // Run the chain
     if (nextMiddlewares[0]) {
-      nextMiddlewares[0](message, extras)
+      nextMiddlewares[0](level, message, extras)
     }
   }
 
