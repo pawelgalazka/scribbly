@@ -25,6 +25,9 @@
     "url": "https://github.com/pawelgalazka/scribbly/issues"
   },
   "homepage": "https://github.com/pawelgalazka/scribbly#readme",
+  "dependencies": {
+    "lodash.escaperegexp": "4.1.2"
+  },
   "devDependencies": {
     "babel-cli": "6.16.0",
     "babel-core": "6.16.0",
@@ -52,8 +55,5 @@
       "eslint-config-standard"
     ],
     "parser": "babel-eslint"
-  },
-  "dependencies": {
-    "lodash.escaperegexp": "4.1.2"
   }
 }
