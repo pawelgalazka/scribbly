@@ -29,7 +29,7 @@ Installation:
 **Simple logging to the console**
 
 ```javascript
-import scribbly from 'scribbly' // const scribbly = require('scribbly').default
+import scribbly from 'scribbly'
 import { consoleStreamer } from 'scribbly/middlewares'
 
 const log = scribbly.use(consoleStreamer)
@@ -177,7 +177,8 @@ scribbly.use(fileStreamer(fs, './logs.txt'))
 Passes only logs which are equal or higher than given level.
 
 ```javascript
-import scribbly, { levels } from 'scribbly'
+import scribbly from 'scribbly'
+import { levels } from 'scribbly/core'
 
 scribbly.use(levelFilter(levels.ERROR))
 ```
@@ -220,7 +221,7 @@ It adds time information to the message.
 ### Logger
 
 ```javascript
-import { Logger } from 'scribbly'
+import { Logger } from 'scribbly/core'
 ```
 
 Main class of the scribbly logger. Instance of it can by imported by 
@@ -271,7 +272,7 @@ Same as `log(levels.CRITICAL, message, extras)`.
 ### levels
 
 ```javascript
-import { levels } from 'scribly'
+import { levels } from 'scribbly/core'
 ```
 
 Stores a set of constants which stores numerical representation of logging levels.
