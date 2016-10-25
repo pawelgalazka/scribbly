@@ -107,7 +107,7 @@ anything, they are just functions.
 ```javascript
 const log = scribbly.use((next, level, message, extras) => {
   
-  next(message, extras)
+  next(level, message, extras)
 })
 ```
 
