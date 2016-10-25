@@ -31,13 +31,13 @@ export function consoleStreamer (next, level, message, extras) {
       console.error(...args)
       break
   }
-  next(message, extras)
+  next(level, message, extras)
 }
 
 export function enableWhen (isOn) {
   return (next, level, message, extras) => {
     if (isOn) {
-      next(message, extras)
+      next(level, message, extras)
     }
   }
 }
@@ -66,7 +66,7 @@ export function externalLogger (logger) {
         logger.critical(...args)
         break
     }
-    next(message, extras)
+    next(level, message, extras)
   }
 }
 
@@ -78,14 +78,14 @@ export function fileStreamer (fs, path) {
     }
     messageToFile += '\n'
     fs.appendFileSync(path, messageToFile)
-    next(message, extras)
+    next(level, message, extras)
   }
 }
 
 export function levelFilter (minLevel) {
   return (next, level, message, extras) => {
     if (level >= minLevel) {
-      next(message, extras)
+      next(level, message, extras)
     }
   }
 }
@@ -106,12 +106,12 @@ export function namespace (name, format = '[{name}] ', debug) {
   return (next, level, message, extras) => {
     if (allowedNamespaces.some(matcher)) {
       const prefix = format.replace(/\{name\}/g, name)
-      next(`${prefix}${message}`, extras)
+      next(level, `${prefix}${message}`, extras)
     }
   }
 }
 
 export function timeFormatter (next, level, message, extras) {
   let time = (new Date()).toLocaleString()
-  next(`[${time}] ${message}`, extras)
+  next(level, `[${time}] ${message}`, extras)
 }
