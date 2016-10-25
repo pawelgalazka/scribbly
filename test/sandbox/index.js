@@ -1,7 +1,9 @@
 const scribbly = require('scribbly')
 const m = require('scribbly/middlewares')
+const c = require('scribbly/core')
 const fs = require('fs')
 
+c.Logger
 const log1 = scribbly.use(m.consoleStreamer)
 const log2 = scribbly.use(m.namespace('main')).use(m.consoleStreamer)
 const log3 = scribbly.use(m.namespace('ignored')).use(m.consoleStreamer)
