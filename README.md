@@ -49,8 +49,13 @@ log.critical('Hello')
 import scribbly from 'scribbly'
 import { consoleStreamer, namespace } from 'scribbly/middlewares'
 
-const n1 = scribbly.use(namespace('n1')).use(consoleStreamer)
-const n2 = scribbly.use(namespace('n2')).use(consoleStreamer)
+const n1 = scribbly
+  .use(namespace('n1'))
+  .use(consoleStreamer)
+  
+const n2 = scribbly
+  .use(namespace('n2'))
+  .use(consoleStreamer)
 
 n1.info('Hello from n1')
 n2.info('Hello from n2')
