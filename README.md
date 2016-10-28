@@ -1,6 +1,6 @@
 # scribbly ![node version](https://img.shields.io/node/v/scribbly.svg) [![Build Status](https://travis-ci.org/pawelgalazka/scribbly.svg?branch=master)](https://travis-ci.org/pawelgalazka/scribbly) [![npm version](https://badge.fury.io/js/scribbly.svg)](https://badge.fury.io/js/scribbly)
 
-Scribbly is a simple isomorphic logging tool which is based on middleware system. 
+Scribbly is a simple isomorphic logging tool which is based on the middleware system. 
 Management and construction of middlewares are very similar to the ones in *expressjs*. 
 This allows broad flexibility and it keeps api simple.
 
@@ -55,6 +55,9 @@ const n2 = scribbly.use(namespace('n2')).use(consoleStreamer)
 n1.info('Hello from n1')
 n2.info('Hello from n2')
 ```
+
+Only log from `n1` namespace will be emitted because we enabled specific namespaces in
+`DEBUG` global which are `n1` and `n3`.
     
 Output:
 
