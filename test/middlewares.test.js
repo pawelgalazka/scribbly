@@ -17,15 +17,15 @@ describe('middleware', () => {
     calls = []
   })
 
-  function registerCalls (next, level, message) {
-    calls.push([level, message])
+  function registerCalls (next, level, message, extras) {
+    calls.push([level, message, extras])
   }
 
   describe('enableWhen', () => {
     it('should log when enabled', () => {
       logger = log.use(enableWhen(true)).use(registerCalls)
       logger.info('test')
-      expect(calls).toEqual([[20, 'test']])
+      expect(calls).toEqual([[20, 'test', undefined]])
     })
 
     it('should not log when disabled', () => {
@@ -36,15 +36,20 @@ describe('middleware', () => {
   })
 
   describe('externalLogger', () => {
-    it('should log to external logger', () => {
-      let mLogger = {
+    let mLogger
+
+    beforeEach(() => {
+      mLogger = {
         debug: jest.fn(),
         info: jest.fn(),
         warning: jest.fn(),
         error: jest.fn(),
         critical: jest.fn()
       }
-      logger = log.use(externalLogger(mLogger))
+      logger = log.use(externalLogger(mLogger)).use(registerCalls)
+    })
+
+    it('should log to external logger', () => {
       logger.debug('d')
       logger.info('i', {a: 1})
       logger.warning('w')
@@ -55,6 +60,11 @@ describe('middleware', () => {
       expect(mLogger.warning.mock.calls).toEqual([['w']])
       expect(mLogger.error.mock.calls).toEqual([['e']])
       expect(mLogger.critical.mock.calls).toEqual([['c']])
+    })
+
+    it('should pass logs further', () => {
+      logger.info('i', {a: 1})
+      expect(calls).toEqual([[20, 'i', {a: 1}]])
     })
   })
 
@@ -76,6 +86,11 @@ describe('middleware', () => {
         ['./logs.txt', 't2 {"extras":"abc"}\n']
       ])
     })
+
+    it('should pass logs further', () => {
+      logger.info('i', {a: 1})
+      expect(calls).toEqual([[20, 'i', {a: 1}]])
+    })
   })
 
   describe('levelFilter', () => {
@@ -89,7 +104,7 @@ describe('middleware', () => {
       logger.info('i')
       logger.warning('w')
       logger.error('e')
-      expect(calls).toEqual([[30, 'w'], [40, 'e']])
+      expect(calls).toEqual([[30, 'w', undefined], [40, 'e', undefined]])
     })
   })
 
@@ -112,25 +127,25 @@ describe('middleware', () => {
       it('should emit the log with namespace name as a prefix', () => {
         logger = log.use(namespace('n1', '[{name}] ', DEBUG)).use(registerCalls)
         logger.info('test message')
-        expect(calls).toEqual([[20, '[n1] test message']])
+        expect(calls).toEqual([[20, '[n1] test message', undefined]])
       })
 
       it('should emit the log when namespace name matches given wildcard', () => {
         logger = log.use(namespace('n2:sub:s1', '[{name}] ', DEBUG)).use(registerCalls)
         logger.info('test message')
-        expect(calls).toEqual([[20, '[n2:sub:s1] test message']])
+        expect(calls).toEqual([[20, '[n2:sub:s1] test message', undefined]])
       })
 
       it('should pass any log when general wildcard given', () => {
         logger = log.use(namespace('n2:sub:s1', '[{name}] ', '*')).use(registerCalls)
         logger.info('test message')
-        expect(calls).toEqual([[20, '[n2:sub:s1] test message']])
+        expect(calls).toEqual([[20, '[n2:sub:s1] test message', undefined]])
       })
 
       it('should emit the log with custom namespace prefix', () => {
         logger = log.use(namespace('n1', '{name}: ', DEBUG)).use(registerCalls)
         logger.info('test message')
-        expect(calls).toEqual([[20, 'n1: test message']])
+        expect(calls).toEqual([[20, 'n1: test message', undefined]])
       })
     })
   })
