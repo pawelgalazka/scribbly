@@ -9,22 +9,16 @@ describe('CoreLogger', () => {
     logger = new CoreLogger()
   })
 
-  describe('without any middleware', () => {
-    it('should do nothing', () => {
-      logger.log(10, 'test message')
-    })
+  it('should have no middlewares by default', () => {
+    expect(logger.middlewares).toEqual([])
+  })
 
-    it('should have no middlewares', () => {
-      expect(logger.middlewares).toEqual([])
-    })
-
-    it('should be immutable', () => {
-      expect(() => {
-        logger.middlewares.push(() => {})
-      }).toThrowError(/object is not extensible/)
-      logger.use(() => {})
-      expect(logger.middlewares).toEqual([])
-    })
+  it('should be immutable', () => {
+    expect(() => {
+      logger.middlewares.push(() => {})
+    }).toThrowError(/object is not extensible/)
+    logger.use(() => {})
+    expect(logger.middlewares).toEqual([])
   })
 
   describe('with middleware', () => {
