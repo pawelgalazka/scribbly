@@ -6,7 +6,8 @@ import {
   externalLogger,
   fileStreamer,
   levelFilter,
-  namespace
+  namespace,
+  timeFormatter
 } from '../middlewares'
 
 describe('middleware', () => {
@@ -147,6 +148,19 @@ describe('middleware', () => {
         logger.info('test message')
         expect(calls).toEqual([[20, 'n1: test message', undefined]])
       })
+    })
+  })
+
+  describe('timeFormatter', () => {
+    beforeEach(() => {
+      logger = log.use(timeFormatter).use(registerCalls)
+    })
+
+    it('should pass logs further with time annotation', () => {
+      logger.info('i', {a: 1})
+      expect(calls[0][0]).toEqual(20)
+      expect(calls[0][1]).toMatch(/^\[\d{1,2}\/\d{1,2}\/\d{4}, \d{1,2}:\d{1,2}:\d{1,2} (AM|PM)\] i$/)
+      expect(calls[0][2]).toEqual({a: 1})
     })
   })
 })
