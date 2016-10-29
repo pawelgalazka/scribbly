@@ -1,7 +1,7 @@
 {
   "name": "scribbly",
   "version": "1.0.0-beta.4",
-  "description": "Minimalistic and flexible logging tool",
+  "description": "Minimalistic and flexible logger",
   "main": "index.js",
   "scripts": {
     "test": "run test"
